@@ -3,11 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using WebApplication1.Models;
 
 namespace WebApplication1.Controllers
 {
     public class CuisineController : Controller
     {
+        // GET: Cousine
+        public ActionResult Index()
+        {
+            return View(restaurants);
+        }
+
         // GET: Cousine
         public ActionResult Search(string name = "French")
         {
@@ -46,23 +53,22 @@ namespace WebApplication1.Controllers
         // GET: Cousine/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            var model = restaurants.Single(r => r.Id == id);
+            return View(model);
         }
 
         // POST: Cousine/Edit/5
         [HttpPost]
         public ActionResult Edit(int id, FormCollection collection)
         {
-            try
-            {
-                // TODO: Add update logic here
+            var restaurant = restaurants.Single(r => r.Id == id);
 
+            if (TryUpdateModel(restaurant))
+            {
+                TryUpdateModel(restaurant);
                 return RedirectToAction("Index");
             }
-            catch
-            {
-                return View();
-            }
+            return View(restaurant);
         }
 
         // GET: Cousine/Delete/5
@@ -86,5 +92,26 @@ namespace WebApplication1.Controllers
                 return View();
             }
         }
+
+        static List<Restaurant> restaurants = new List<Restaurant> {
+            new Restaurant{
+                Id = 1,
+                Name = "Cruz Azul",
+                City = "Gye",
+                Country = "Ecuador"
+            },
+            new Restaurant{
+                Id = 2,
+                Name = "Sport Planet",
+                City = "UIO",
+                Country = "Ecuador"
+            },
+            new Restaurant{
+                Id = 3,
+                Name = "Dorado",
+                City = "CUENCA",
+                Country = "Ecuador"
+            }
+        };
     }
 }
